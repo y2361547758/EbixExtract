@@ -5,6 +5,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
 using EbiJALibrary;
+using System.Reflection;
+
+[assembly: AssemblyProduct("ebookjapan")]
+
 namespace ConsoleApp1 {
 	class Program {
 		static unsafe void Main(string[] args) {
@@ -18,7 +22,7 @@ namespace ConsoleApp1 {
 			else outdir = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\";
 			Directory.CreateDirectory(outdir);
 			var stopWatch = new Stopwatch();
-            stopWatch.Start();
+			stopWatch.Start();
 			/* Load .ebix with outer lib */
 			var ebixBook = new EbixBook(path);
 			var libraryVersion = ebixBook.LibraryVersion;
@@ -31,21 +35,22 @@ namespace ConsoleApp1 {
 			ebixBook.ebijaSeedInspection(ref array);
 			/* Load .ebix Finished */
 			Console.WriteLine("[*] Opened " + path);
-            Parallel.For(0, ebixBook.PageCount, i =>
-            {
-				// Console.Write("[-] Extrating " + i.ToString() + ".jpg ");
+			for (int i = 0; i < ebixBook.PageCount; ++i)
+			{
+				if ((i + 1) % 10 == 0 || i + 1 == ebixBook.PageCount) 
+					Console.WriteLine("[-] Extrating " + (i + 1).ToString() + " / " + ebixBook.PageCount.ToString());
 				try {
 					var page = ebixBook.Extract(i);
 					var f = File.Open(outdir + i.ToString() + ".jpg", FileMode.Create, FileAccess.Write);
-					page.CopyToAsync(f);
+					page.CopyTo(f);
 					// Console.WriteLine("Length:" + page.Length);
 				} catch (Exception e) {
 					Console.WriteLine("Fail: " + e);
 				}
-            });
+			}
 			Console.WriteLine("[*] Done. Output at " + outdir);
-            stopWatch.Stop();
-            Console.WriteLine("[>] In " + stopWatch.ElapsedMilliseconds + " ms.");
+			stopWatch.Stop();
+			Console.WriteLine("[>] In " + stopWatch.ElapsedMilliseconds + " ms.");
 		}
 	}
 }
