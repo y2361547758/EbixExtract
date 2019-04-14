@@ -6,7 +6,7 @@ This program can unpack .ebix downloaded EBook package for [EBookJapan](https://
 
 Windows
 
-.Net Framework 4.6
+.Net Framework 4.7.2
 
 ## Build
 
@@ -14,7 +14,7 @@ See make.bat
 
 ## Usage
 
-Download .ebix with [ebiReader](https://www.ebookjapan.jp/ebj/reader/windows/reader5.asp), default download path is `Documents\EBI\BookReader4\%UserName%\My Books\v4`.
+Download .ebix with [ebiReader](https://www.ebookjapan.jp/ebj/guide/app-connect/windows/), default download path is `Documents\EBJ\ebookjapan\Books`.
 
 Run this program with `main.exe EBIX_PATE [OUTPUT_DIR]` then find all jpg in the output dir (default in the dir with same name as .ebix)
 
